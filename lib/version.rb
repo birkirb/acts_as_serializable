@@ -1,7 +1,7 @@
 class Version
 
   def initialize(version_string)
-    version_string = version_string.sub('_','.')
+    version_string = version_string.gsub('_','.')
     @levels = version_string.split('.')
 
     @levels.each_with_index do |number, index|
@@ -25,13 +25,26 @@ class Version
     get_level(3)
   end
 
-  def <=>(rhs)
-    max_levels = @levels.size
-    max_levels = rhs.levels.size if rhs.levels.size > max_levels
+  def <(rhs)
+    (self <=> rhs) < 0
+  end
 
-    for(1..max_levels) do |level|
+  def >(rhs)
+    (self <=> rhs) > 0
+  end
+
+  def ==(rhs)
+    (self <=> rhs) == 0
+  end
+
+  def <=>(rhs)
+    max_levels = @levels.size - 1
+    max_levels = rhs.levels.size - 1 if rhs.levels.size > max_levels
+
+    (0..max_levels).each do |level|
       lhs_level = @levels[level] || 0
-      rhs_level = rhs.level[level] || 0
+      rhs_level = rhs.levels[level] || 0
+    # puts "Comparing lhs: #{lhs_level} with rhs: #{rhs_level}"
 
       if lhs_level == rhs_level
         next
@@ -39,20 +52,23 @@ class Version
         return lhs_level <=> rhs_level
       end
     end
+    0 # Ended on an equality
   end
 
   def to_s
     @levels.join('.')
   end
 
-  private
+  protected
 
   def levels
     @levels
   end
 
+  private
+
   def get_level(level)
-    if @levels.size >= level
+    if @levels.size > level
       @levels[level]
     else
       0
