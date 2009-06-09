@@ -44,7 +44,6 @@ class Version
     (0..max_levels).each do |level|
       lhs_level = @levels[level] || 0
       rhs_level = rhs.levels[level] || 0
-    # puts "Comparing lhs: #{lhs_level} with rhs: #{rhs_level}"
 
       if lhs_level == rhs_level
         next
