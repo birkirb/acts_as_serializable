@@ -15,6 +15,11 @@ describe Serializable::Version, 'when created with a version numeric string' do
     version.to_s.should == '2.1.2'
   end
 
+  it '#to_s_underscored should give an underscored version string.' do
+    version = Serializable::Version.new('2.1.2')
+    version.to_s_underscored.should == '2_1_2'
+  end
+
   it 'should give 0 for all numbers not specified.' do
     version = Serializable::Version.new('3')
     version.major.should == 3

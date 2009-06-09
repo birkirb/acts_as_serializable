@@ -55,8 +55,12 @@ module Serializable
       0 # Ended on an equality
     end
 
-    def to_s
-      @levels.join('.')
+    def to_s(seperator = '.')
+      @levels.join(seperator)
+    end
+
+    def to_s_underscored
+      to_s('_')
     end
 
     protected

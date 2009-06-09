@@ -1,5 +1,8 @@
+require 'builder/xmlmarkup'
+require 'jsonbuilder'
+
 module Serializable
-  SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version((?:\d+_?)+)$/
+  SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version_((:?\d+_?)+)$/
   SERIALIZED_CLASS_NAME_REGEXP = /^version_((?:\d+_?)+)$/
 
   def self.included(base)
@@ -9,10 +12,13 @@ module Serializable
   module ClassMethods
     def acts_as_serializable
       include Serializable::InstanceMethods
+      extend Serializable::SingletonMethods
       @serialization_versions = Versions.new
       find_local_serialization_methods
     end
+  end
 
+  module SingletonMethods
     def find_project_serialization_classes(project_path)
       klass_name = self.class.name
       serialization_directory = File.join(project_path, 'serializations', klass_name.underscore)
@@ -29,16 +35,14 @@ module Serializable
       end
     end
 
-    protected
-
-    def serialization_version
-      @serialization_version
+    def serialization_versions
+      @serialization_versions
     end
 
     private
 
     def find_local_serialization_methods
-      self.class.instance_methods.each do |method_name|
+      self.instance_methods.each do |method_name|
         if method_name = method_name.match(SERIALIZE_TO_VERSION_REGEXP)
           @serialization_versions << Version.new(method_name[1])
         end
@@ -71,7 +75,7 @@ module Serializable
     def serialize(builder, options = {})
       if version_number = options[:version] || (defined?(DEFAULT_VERSION) && DEFAULT_VERSION)
         if version = self.class.serialization_versions.find_version(Version.new(version_number))
-          return self.send("serialized_to_version_#{version.to_s}", builder, options)
+          return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options)
         else
           raise "Version #{version_number} given but no serialization method found"
         end
