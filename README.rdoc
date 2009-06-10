@@ -1,0 +1,27 @@
+= acts_as_serializable
+
+by Birkir A. Barkarson <birkirb@stoicviking.net>
+
+== Description
+
+A gem/rails plugin for handling versioning of serialization methods (to_xml, to_json).
+Uses the builder pattern for a one stop multi-format serialization method, which can be
+versioned in-class, in a module or in seperately managed class files.
+
+== Installation from source
+
+  git clone git://github.com/birkirb/acts_as_serializable.git
+  cd acts_as_serializable
+  rake install
+
+=== Gem Installation
+
+  gem install birkirb-acts_as_serializable --source http://gems.github.com
+
+== Features/Problems
+
+== Copyright
+
+Author::    Birkir A. Barkarson <birkirb@stoicviking.net>
+Copyright:: Copyright (c) 2009
+License::   MIT License
