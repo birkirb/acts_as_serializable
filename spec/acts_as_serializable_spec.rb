@@ -19,13 +19,21 @@ class SerializableObject
 end
 
 class WithSerialize < SerializableObject
+  include Serializable
+  acts_as_serializable
+
   def serialize(builder, options)
     builder
   end
 end
 
+class NoSerializationObject
+  include Serializable
+  acts_as_serializable
+end
 
-describe Serializable, 'when included in a class, that class' do
+
+describe Serializable, 'if included in a class, then that class' do
 
   it 'should respond to #to_xml(options)' do
     klass = SerializableObject.new
@@ -42,7 +50,7 @@ describe Serializable, 'when included in a class, that class' do
     klass.respond_to?("to_json").should be_true
   end
 
-  context 'with the serialized method overriden to return the builder, then' do
+  context 'with the serialized method overriden to return the builder' do
 
     it '#to_xml should return an Builder::XmlMarkup' do
       klass = WithSerialize.new
@@ -62,7 +70,7 @@ describe Serializable, 'when included in a class, that class' do
 
 end
 
-describe Serializable, 'when included in a class that has multible versioned serialization methods' do
+describe Serializable, 'when included in a class that has multiple versioned serialization methods' do
 
   context 'and a to_format method is called with a version option' do
 
@@ -94,6 +102,19 @@ describe Serializable, 'when included in a class that has multible versioned ser
       klass = SerializableObject.new
 
       klass.to_xml.should == "This is version 2.1"
+    end
+
+    it 'should throw an error if no serialization method exists' do
+      klass = NoSerializationObject.new
+
+      lambda { klass.to_xml }.should raise_error(RuntimeError, "No serialization method found")
+    end
+
+    it 'should use the default method if it is set' do
+      SerializableObject.default_serialization_version = Serializable::Version.new('1.5')
+      klass = SerializableObject.new
+
+      klass.to_xml.should == "This is version 1.5.0"
     end
   end
 end

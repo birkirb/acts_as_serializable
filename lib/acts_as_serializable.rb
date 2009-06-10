@@ -15,6 +15,7 @@ module Serializable
       extend Serializable::SingletonMethods
       @serialization_versions = Versions.new
       find_local_serialization_methods
+      @default_serialization_version = @serialization_versions.last
     end
   end
 
@@ -37,6 +38,18 @@ module Serializable
 
     def serialization_versions
       @serialization_versions
+    end
+
+    def default_serialization_version
+      @default_serialization_version
+    end
+
+    def default_serialization_version=(new_version)
+      if new_version.is_a?(Version)
+        @default_serialization_version = new_version
+      else
+        @default_serialization_version = Version.new(new_version)
+      end
     end
 
     private
@@ -73,11 +86,17 @@ module Serializable
     end
 
     def serialize(builder, options = {})
-      if version_number = options[:version] || (defined?(DEFAULT_VERSION) && DEFAULT_VERSION)
+      if version_number = options[:version]
         if version = self.class.serialization_versions.find_version(Version.new(version_number))
           return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options)
         else
           raise "Version #{version_number} given but no serialization method found"
+        end
+      else
+        if version = self.class.default_serialization_version
+          return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options)
+        else
+          raise "No serialization method found"
         end
       end
     end
