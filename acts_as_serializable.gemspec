@@ -8,16 +8,25 @@ Gem::Specification.new do |s|
   s.description = %q{Easy versioning of serialization methods}
   s.email = %q{birkirb@stoicviking.net}
   s.extra_rdoc_files = ["README"]
-  s.files = ["README", "Rakefile", "spec/*", "lib/*", "init.rb", "spec/spec_helper.rb"]
+  s.files = ["README",
+             "Rakefile",
+             "init.rb",
+             "lib/acts_as_serializable.rb",
+             "lib/version.rb",
+             "lib/versions.rb"
+  ]
   s.has_rdoc = true
-  #s.homepage = %q{}
+  s.homepage = %q{http://github.com/birkirb/acts_as_serializable}
   s.rdoc_options = ["--title", "acts_as_serializable documentation", "--charset", "utf-8", "--opname", "index.html", "--line-numbers", "--main", "README", "--inline-source", "--exclude", "^(examples)/"]
   s.require_paths = ["lib"]
   #s.rubyforge_project = %q{}
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Easy versioning of serialization methods}
-  s.test_files = ["spec/acts_as_serializable.rb"]
-
+  s.test_files = ["spec/acts_as_serializable_spec.rb",
+                  "spec/version_spec.rb",
+                  "spec/versions_spec.rb",
+                  "spec/spec_helper.rb"
+  ]
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 2
