@@ -1,9 +1,11 @@
 require 'builder/xmlmarkup'
 require 'jsonbuilder'
+require 'active_support'
+require 'find'
 
 module Serializable
   SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version_((:?\d+_?)+)$/
-  SERIALIZED_CLASS_NAME_REGEXP = /^version_((?:\d+_?)+)$/
+  SERIALIZED_CLASS_NAME_REGEXP = /\/version_((:?\d+_?)+)\.rb$/
 
   def self.included(base)
     base.extend(ClassMethods)
@@ -15,25 +17,23 @@ module Serializable
       extend Serializable::SingletonMethods
       @serialization_versions = Versions.new
       find_local_serialization_methods
-      @default_serialization_version = @serialization_versions.last
     end
   end
 
   module SingletonMethods
     def find_project_serialization_classes(project_path)
-      klass_name = self.class.name
+      klass_name = self.name
       serialization_directory = File.join(project_path, 'serializations', klass_name.underscore)
-      klasses = Array.new
       Find.find(serialization_directory) do |path|
         if File.file?(path) && versioned_klass = path.match(SERIALIZED_CLASS_NAME_REGEXP)
           require path
-          klass = self.const_get("Serializable::#{klass_name}::Version_#{versioned_klass[1]}")
-          if klass && klass.responds_to?("serialize")
+          klass = Serializable.const_get("#{klass_name}").const_get("Version_#{versioned_klass[1]}")
+          if klass && klass.respond_to?(:serialize)
             define_local_serialization_method(versioned_klass[1])
-            @serialization_versions << Version.new(versioned_klass[1])
           end
         end
       end
+      @default_serialization_version = @serialization_versions.last
     end
 
     def serialization_versions
@@ -60,14 +60,16 @@ module Serializable
           @serialization_versions << Version.new(method_name[1])
         end
       end
+      @default_serialization_version = @serialization_versions.last
     end
 
     def define_local_serialization_method(method_version)
       class_eval <<-EOV
         def serialize_to_version_#{method_version}(builder, options)
-          Serializable::#{self.class.name}::Version#{method_version}.serialize(self, builder, options)
+          Serializable::#{self.name}::Version_#{method_version}.serialize(self, builder, options)
         end
       EOV
+      @serialization_versions << Version.new(method_version)
     end
   end
 

@@ -32,6 +32,11 @@ class NoSerializationObject
   acts_as_serializable
 end
 
+class TestModel
+  include Serializable
+  acts_as_serializable
+  find_project_serialization_classes(File.join(File.dirname(__FILE__)))
+end
 
 describe Serializable, 'if included in a class, then that class' do
 
@@ -115,6 +120,49 @@ describe Serializable, 'when included in a class that has multiple versioned ser
       klass = SerializableObject.new
 
       klass.to_xml.should == "This is version 1.5.0"
+    end
+  end
+end
+
+describe Serializable, 'when included in a class that has multiple serialization classes' do
+
+  context 'and a to_format method is called with a version option' do
+
+    it 'should execute that exact versioned serialization assuming it exists' do
+      klass = TestModel.new
+
+      klass.to_xml(:version => '1.0.0').should == "This is version 1.0.0 for TestModel"
+      klass.to_json(:version => '1.5.0').should == "This is version 1.5.0 for TestModel"
+      klass.to_hash(:version => '2.1.0').should == "This is version 2.1 for TestModel"
+    end
+
+    it 'should execute a lower version if an exact one does not exist' do
+      klass = TestModel.new
+
+      klass.to_xml(:version => '1.4.0').should == "This is version 1.0.0 for TestModel"
+      klass.to_json(:version => '3.1.0').should == "This is version 2.1 for TestModel"
+    end
+
+    it 'should raise an error if no corresponding version exists' do
+      klass = TestModel.new
+
+      lambda { klass.to_hash(:version => '0.1.0') }.should raise_error(RuntimeError, "Version 0.1.0 given but no serialization method found")
+    end
+  end
+
+  context 'and a to_format method is called with no version option' do
+
+    it 'should default to the most recent version if no global default is set' do
+      klass = TestModel.new
+
+      klass.to_xml.should == "This is version 2.1 for TestModel"
+    end
+
+    it 'should use the default method if it is set' do
+      TestModel.default_serialization_version = "1.5"
+      klass = TestModel.new
+
+      klass.to_xml.should == "This is version 1.5.0 for TestModel"
     end
   end
 end
