@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = %q{acts_as_serializable}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Birkir A. Barkarson"]
@@ -17,7 +17,19 @@ Gem::Specification.new do |s|
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/birkirb/acts_as_serializable}
-  s.rdoc_options = ["--title", "acts_as_serializable documentation", "--charset", "utf-8", "--opname", "index.html", "--line-numbers", "--main", "README.rdoc", "--inline-source", "--exclude", "^(examples)/"]
+  s.rdoc_options = ["--title",
+                    "acts_as_serializable documentation",
+                    "--charset",
+                    "utf-8",
+                    "--opname",
+                    "index.html",
+                    "--line-numbers",
+                    "--main",
+                    "README.rdoc",
+                    "--inline-source",
+                    "--exclude",
+                    "^(examples)/"
+  ]
   s.require_paths = ["lib"]
   #s.rubyforge_project = %q{}
   s.rubygems_version = %q{1.3.1}
@@ -27,12 +39,13 @@ Gem::Specification.new do |s|
                   "spec/versions_spec.rb",
                   "spec/spec_helper.rb"
   ]
+
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 2
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<jsonbuilder>)
+    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.3.1') then
+      s.add_runtime_dependency(%q<jsonbuilder>, [">= 0.0.6"])
       s.add_runtime_dependency(%q<activesupport>, [">= 1.2"])
     end
   end
