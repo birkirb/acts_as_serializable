@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.date = %q{2009-06-06}
   s.description = %q{Easy versioning of serialization methods}
   s.email = %q{birkirb@stoicviking.net}
-  s.extra_rdoc_files = ["README"]
-  s.files = ["README",
+  s.extra_rdoc_files = ["README.rdoc"]
+  s.files = ["README.rdoc",
              "Rakefile",
              "init.rb",
              "lib/acts_as_serializable.rb",
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/birkirb/acts_as_serializable}
-  s.rdoc_options = ["--title", "acts_as_serializable documentation", "--charset", "utf-8", "--opname", "index.html", "--line-numbers", "--main", "README", "--inline-source", "--exclude", "^(examples)/"]
+  s.rdoc_options = ["--title", "acts_as_serializable documentation", "--charset", "utf-8", "--opname", "index.html", "--line-numbers", "--main", "README.rdoc", "--inline-source", "--exclude", "^(examples)/"]
   s.require_paths = ["lib"]
   #s.rubyforge_project = %q{}
   s.rubygems_version = %q{1.3.1}

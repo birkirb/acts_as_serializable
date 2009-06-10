@@ -18,7 +18,57 @@ versioned in-class, in a module or in seperately managed class files.
 
   gem install birkirb-acts_as_serializable --source http://gems.github.com
 
-== Features/Problems
+== Examples
+
+First:
+
+  require 'rubygems'
+  require 'acts_as_serializable'
+
+
+Define your own serialization method:
+
+  class SimpleClass
+    include Serializable
+    acts_as_serializable
+
+    def serialize(builder, options)
+      builder.root do
+        builder.text 'hello world'
+      end
+    end
+  end
+
+  SimpleClass.new.to_xml => "<root><text>hello world</text></root>"
+  SimpleClass.new.to_hash => {:text=>"hello world"}
+  SimpleClass.new.to_json => "{\"text\": \"hello world\"}"
+
+Use versioned serialization methods:
+
+  class SimpleClass
+    include Serializable
+
+    def serialize_to_version_1_0(builder, options)
+      builder.root do
+        builder.text 'hello world'
+      end
+    end
+
+    def serialize_to_version_2_0(builder, options)
+      builder.texts do
+        builder.text "It's a brave new world"
+      end
+    end
+
+    acts_as_serializable
+  end
+
+  SimpleClass.new.to_xml => "<texts><text>It's a brave new world</text></texts>" 
+  SimpleClass.new.to_hash(:version => '1.0') => {:text=>"hello world"}
+
+Use classes containing versioned serialization methods:
+
+  WIP
 
 == Copyright
 
