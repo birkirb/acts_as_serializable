@@ -60,7 +60,7 @@ begin
 
   task :test do
     Rake::Task[:spec].invoke
-    Rake::Task[:features].invoke
+#   Rake::Task[:features].invoke
   end
 
   desc "Run tests with RCov"
