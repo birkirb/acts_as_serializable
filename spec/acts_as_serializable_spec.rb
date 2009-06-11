@@ -38,6 +38,14 @@ class TestModel
   find_project_serialization_classes(File.join(File.dirname(__FILE__)))
 end
 
+::RAILS_ROOT = File.join(File.dirname(__FILE__))
+$LOAD_PATH.push(File.join(::RAILS_ROOT, 'app'))
+
+class TestRailsModel
+  include Serializable
+  acts_as_serializable
+end
+
 describe Serializable, 'if included in a class, then that class' do
 
   it 'should respond to #to_xml(options)' do
@@ -163,6 +171,14 @@ describe Serializable, 'when included in a class that has multiple serialization
       klass = TestModel.new
 
       klass.to_xml.should == "This is version 1.5.0 for TestModel"
+    end
+
+    it 'should auto find version classes for Rails applications' do
+      klass = TestRailsModel.new
+
+      klass.to_xml(:version => '1.0.0').should == "This is version 1.0.0 for TestRailsModel"
+      klass.to_json(:version => '1.5.0').should == "This is version 1.5.0 for TestRailsModel"
+      klass.to_hash(:version => '2.1.0').should == "This is version 2.1 for TestRailsModel"
     end
   end
 end

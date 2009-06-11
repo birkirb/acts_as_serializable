@@ -2,8 +2,6 @@ require 'builder/xmlmarkup'
 require 'jsonbuilder'
 require 'active_support'
 require 'find'
-require 'versions'
-require 'version'
 
 module Serializable
   SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version_((:?\d+_?)+)$/
@@ -19,6 +17,12 @@ module Serializable
       extend Serializable::SingletonMethods
       @serialization_versions = Versions.new
       find_local_serialization_methods
+      if defined?(RAILS_ROOT)
+        # Rails plugin usage
+        scan_rails_app_paths.each do |path|
+          find_project_serialization_classes(path)
+        end
+      end
     end
   end
 
@@ -72,6 +76,16 @@ module Serializable
         end
       EOV
       @serialization_versions << Version.new(method_version)
+    end
+
+    def scan_rails_app_paths
+      project_paths = Array.new
+      $LOAD_PATH.each do |path|
+        if path.match(/#{Regexp.escape(RAILS_ROOT)}.*\/app$/)
+          project_paths << path
+        end
+      end
+      project_paths
     end
   end
 
