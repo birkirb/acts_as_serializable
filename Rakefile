@@ -1,6 +1,26 @@
 require 'rake'
 
 begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |s|
+    s.name = %q{acts_as_serializable}
+    s.authors = ["Birkir A. Barkarson"]
+    s.description = %q{Easy versioning of serialization methods}
+    s.summary = s.description
+    s.email = %q{birkirb@stoicviking.net}
+    s.has_rdoc = true
+    s.homepage = %q{http://github.com/birkirb/acts_as_serializable}
+    s.rubyforge_project = %q{serializable}
+    s.rubygems_version = %q{1.3.1}
+    #s.required_rubygems_version = "1.3.1"
+    s.add_dependency(%q<jsonbuilder>, [">= 0.0.6"])
+    s.add_dependency(%q<activesupport>, [">= 1.2"])
+  end
+rescue LoadError
+  puts "Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+end
+
+begin
   require 'spec/rake/spectask'
 
   Spec::Rake::SpecTask.new('spec') do |t|
