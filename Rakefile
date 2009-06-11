@@ -35,27 +35,27 @@ rescue LoadError
   end
 end
 
-begin
-  require 'cucumber'
-  require 'cucumber/rake/task'
+# begin
+#   require 'cucumber'
+#   require 'cucumber/rake/task'
 
 
-  desc "Run Cucumber feature tests"
-  Cucumber::Rake::Task.new(:features) do |t|
-    t.cucumber_opts = "--format pretty" 
-  end
+#   desc "Run Cucumber feature tests"
+#   Cucumber::Rake::Task.new(:features) do |t|
+#     t.cucumber_opts = "--format pretty" 
+#   end
 
-rescue LoadError
-  desc 'Cucumber rake task not available'
-  task :features do
-    abort 'Cucumber rake task is not available. Be sure to install cucumber as a gem or plugin'
-  end
-end
+# rescue LoadError
+#   desc 'Cucumber rake task not available'
+#   task :features do
+#     abort 'Cucumber rake task is not available. Be sure to install cucumber as a gem or plugin'
+#   end
+# end
 
 begin
   require 'spec/rake/spectask'
-  require 'cucumber'
-  require 'cucumber/rake/task'
+# require 'cucumber'
+# require 'cucumber/rake/task'
   require 'spec/rake/verify_rcov'
 
   task :test do
@@ -67,12 +67,12 @@ begin
   namespace :rcov do
     rm "coverage.data" if File.exist?("coverage.data")
 
-    desc "Run Features with RCov"
-    Cucumber::Rake::Task.new(:features) do |t|
-      t.rcov = true
-      t.rcov_opts = %w{ --exclude osx\/objc,gems\/,spec\/,features\/ --aggregate coverage.data}
-      t.rcov_opts << %[-o "coverage"]
-    end
+#   desc "Run Features with RCov"
+#   Cucumber::Rake::Task.new(:features) do |t|
+#     t.rcov = true
+#     t.rcov_opts = %w{ --exclude osx\/objc,gems\/,spec\/,features\/ --aggregate coverage.data}
+#     t.rcov_opts << %[-o "coverage"]
+#   end
 
     Spec::Rake::SpecTask.new(:spec) do |t|
       t.spec_opts = ["-f specdoc", "-c"]
@@ -84,7 +84,7 @@ begin
     desc "Run both specs and features to generate aggregated coverage"
     task :all do |t|
       Rake::Task["rcov:spec"].invoke
-      Rake::Task["rcov:features"].invoke
+#     Rake::Task["rcov:features"].invoke
     end
 
     RCov::VerifyTask.new(:verify => 'rcov:all') do |t|
