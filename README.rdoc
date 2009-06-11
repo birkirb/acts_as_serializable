@@ -68,7 +68,27 @@ Use versioned serialization methods:
 
 Use classes containing versioned serialization methods:
 
-  WIP
+Given a model in app/models:
+
+  class Person < ActiveRecord::Base
+    acts_as_serializable
+  end
+
+And a serialization in app/serializations/person
+
+  module Serializable
+    module Person
+      class Version_1_1_0
+        def self.serialize(person, builder, options)
+          builder.person do
+            builder.name(person.name)
+          end
+        end
+      end
+    end
+  end
+
+  Person.new(:name => "Birkir").to_xml => "<person><name>Birkir</name></person>" 
 
 == Copyright
 
