@@ -1,7 +1,9 @@
-require 'builder/xmlmarkup'
 require 'jsonbuilder'
 require 'active_support'
 require 'find'
+require 'lib/builder/xml_markup'
+require 'lib/builder/json_format'
+require 'lib/builder/hash_structure.rb'
 
 module Serializable
   SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version_((:?\d+_?)+)$/
@@ -92,11 +94,11 @@ module Serializable
   # This module contains instance methods
   module InstanceMethods
     def to_hash(options = {})
-      serialize(Builder::Hash.new, options)
+      serialize(Builder::HashStructure.new, options)
     end
 
     def to_json(options = {})
-      serialize(Builder::Json.new, options)
+      serialize(Builder::JsonFormat.new, options)
     end
 
     def to_xml(options = {})
@@ -117,6 +119,10 @@ module Serializable
           raise "No serialization method found"
         end
       end
+    end
+
+    def serialize_for(builder, options = {})
+      self.send(builder.serialization_method!, options)
     end
   end
 

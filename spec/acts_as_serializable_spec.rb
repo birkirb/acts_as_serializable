@@ -107,6 +107,14 @@ describe Serializable, 'when included in a class that has multiple versioned ser
 
       lambda { klass.to_hash(:version => '0.1.0') }.should raise_error(RuntimeError, "Version 0.1.0 given but no serialization method found")
     end
+
+    it '#serialize_for should call a to_format methods for a given builder' do
+      klass = SerializableObject.new
+
+      klass.serialize_for(Builder::XmlMarkup.new).should == "This is version 2.1"
+      klass.serialize_for(Builder::JsonFormat.new).should == "This is version 2.1"
+      klass.serialize_for(Builder::HashStructure.new).should == "This is version 2.1"
+    end
   end
 
   context 'and a to_format method is called with no version option' do
