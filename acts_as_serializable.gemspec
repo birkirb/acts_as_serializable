@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
                     "^(examples)/"
   ]
   s.require_paths = ["lib"]
-  #s.rubyforge_project = %q{}
+  s.rubyforge_project = %q{serializable}
   s.rubygems_version = %q{1.3.1}
   s.summary = %q{Easy versioning of serialization methods}
   s.test_files = ["spec/acts_as_serializable_spec.rb",
