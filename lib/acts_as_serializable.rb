@@ -1,9 +1,6 @@
 require 'jsonbuilder'
 require 'active_support'
 require 'find'
-require  File.join(File.dirname(__FILE__), 'builder/xml_markup')
-require  File.join(File.dirname(__FILE__), 'builder/json_format')
-require  File.join(File.dirname(__FILE__), 'builder/hash_structure')
 
 module Serializable
   SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version_((:?\d+_?)+)$/
