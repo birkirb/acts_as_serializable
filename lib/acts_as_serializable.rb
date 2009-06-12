@@ -95,7 +95,7 @@ module Serializable
     end
 
     def to_json(options = {})
-      serialize(Builder::JsonFormat.new, options)
+      serialize(Builder::HashStructure.new, options).to_json
     end
 
     def to_xml(options = {})
