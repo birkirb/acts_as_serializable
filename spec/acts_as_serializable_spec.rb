@@ -23,7 +23,7 @@ class WithSerialize < SerializableObject
   acts_as_serializable
 
   def serialize(builder, options)
-    builder
+    builder.test('value')
   end
 end
 
@@ -67,17 +67,17 @@ describe Serializable, 'if included in a class, then that class' do
 
     it '#to_xml should return an Builder::XmlMarkup serialization' do
       klass = WithSerialize.new
-      klass.to_xml.test.should == "<test/>"
+      klass.to_xml.should == "<test>value</test>"
     end
 
     it '#to_hash should return an Builder::HashStructure serialization' do
       klass = WithSerialize.new
-      klass.to_hash.test('value').should == 'value'
+      klass.to_hash.should == 'value'
     end
 
-    it '#to_json should return an Builder::HashStructure serialization' do
+    it '#to_json should return an Builder::JsonFormat serialization' do
       klass = WithSerialize.new
-      klass.to_json.test('value').should == 'value'
+      klass.to_json.should == '"value"'
     end
   end
 end
@@ -90,7 +90,7 @@ describe Serializable, 'when included in a class that has multiple versioned ser
       klass = SerializableObject.new
 
       klass.to_xml(:version => '1.0.0').should == "This is version 1.0.0"
-      klass.to_json(:version => '1.5.0').should == "This is version 1.5.0"
+      klass.to_json(:version => '1.5.0').should == "\"This is version 1.5.0\""
       klass.to_hash(:version => '2.1.0').should == "This is version 2.1"
     end
 
@@ -98,7 +98,7 @@ describe Serializable, 'when included in a class that has multiple versioned ser
       klass = SerializableObject.new
 
       klass.to_xml(:version => '1.4.0').should == "This is version 1.0.0"
-      klass.to_json(:version => '3.1.0').should == "This is version 2.1"
+      klass.to_json(:version => '3.1.0').should == "\"This is version 2.1\""
     end
 
     it 'should raise an error if no corresponding version exists' do
@@ -111,7 +111,7 @@ describe Serializable, 'when included in a class that has multiple versioned ser
       klass = SerializableObject.new
 
       klass.serialize_for(Builder::XmlMarkup.new).should == "This is version 2.1"
-      klass.serialize_for(Builder::JsonFormat.new).should == "This is version 2.1"
+      klass.serialize_for(Builder::JsonFormat.new).should == "\"This is version 2.1\""
       klass.serialize_for(Builder::HashStructure.new).should == "This is version 2.1"
     end
   end
@@ -147,7 +147,7 @@ describe Serializable, 'when included in a class that has multiple serialization
       klass = TestModel.new
 
       klass.to_xml(:version => '1.0.0').should == "This is version 1.0.0 for TestModel"
-      klass.to_json(:version => '1.5.0').should == "This is version 1.5.0 for TestModel"
+      klass.to_json(:version => '1.5.0').should == "\"This is version 1.5.0 for TestModel\""
       klass.to_hash(:version => '2.1.0').should == "This is version 2.1 for TestModel"
     end
 
@@ -155,7 +155,7 @@ describe Serializable, 'when included in a class that has multiple serialization
       klass = TestModel.new
 
       klass.to_xml(:version => '1.4.0').should == "This is version 1.0.0 for TestModel"
-      klass.to_json(:version => '3.1.0').should == "This is version 2.1 for TestModel"
+      klass.to_json(:version => '3.1.0').should == "\"This is version 2.1 for TestModel\""
     end
 
     it 'should raise an error if no corresponding version exists' do
@@ -184,7 +184,7 @@ describe Serializable, 'when included in a class that has multiple serialization
       klass = TestRailsModel.new
 
       klass.to_xml(:version => '1.0.0').should == "This is version 1.0.0 for TestRailsModel"
-      klass.to_json(:version => '1.5.0').should == "This is version 1.5.0 for TestRailsModel"
+      klass.to_json(:version => '1.5.0').should == "\"This is version 1.5.0 for TestRailsModel\""
       klass.to_hash(:version => '2.1.0').should == "This is version 2.1 for TestRailsModel"
     end
   end
