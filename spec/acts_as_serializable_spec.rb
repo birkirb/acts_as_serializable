@@ -65,22 +65,21 @@ describe Serializable, 'if included in a class, then that class' do
 
   context 'with the serialized method overriden to return the builder' do
 
-    it '#to_xml should return an Builder::XmlMarkup' do
+    it '#to_xml should return an Builder::XmlMarkup serialization' do
       klass = WithSerialize.new
       klass.to_xml.test.should == "<test/>"
     end
 
-    it '#to_hash should return an Builder::Hash' do
+    it '#to_hash should return an Builder::HashStructure serialization' do
       klass = WithSerialize.new
       klass.to_hash.test('value').should == 'value'
     end
 
-    it '#to_json should return an Builder::Json' do
+    it '#to_json should return an Builder::HashStructure serialization' do
       klass = WithSerialize.new
-      klass.to_json.test('value').should == '"value"'
+      klass.to_json.test('value').should == 'value'
     end
   end
-
 end
 
 describe Serializable, 'when included in a class that has multiple versioned serialization methods' do
