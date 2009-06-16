@@ -32,7 +32,7 @@ module Serializable
       Find.find(serialization_directory) do |path|
         if File.file?(path) && versioned_klass = path.match(SERIALIZED_CLASS_NAME_REGEXP)
           require path
-          klass = Serializable.const_get("#{klass_name}").const_get("Version_#{versioned_klass[1]}")
+          klass = Serializations.const_get("#{klass_name}").const_get("Version_#{versioned_klass[1]}")
           if klass && klass.respond_to?(:serialize)
             define_local_serialization_method(versioned_klass[1])
           end
@@ -71,7 +71,7 @@ module Serializable
     def define_local_serialization_method(method_version)
       class_eval <<-EOV
         def serialize_to_version_#{method_version}(builder, options)
-          Serializable::#{self.name}::Version_#{method_version}.serialize(self, builder, options)
+          Serializations::#{self.name}::Version_#{method_version}.serialize(self, builder, options)
         end
       EOV
       @serialization_versions << Version.new(method_version)

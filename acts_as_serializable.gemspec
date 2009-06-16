@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_serializable}
-  s.version = "0.1.4"
+  s.version = "0.1.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Birkir A. Barkarson"]
-  s.date = %q{2009-06-15}
+  s.date = %q{2009-06-16}
   s.description = %q{Easy versioning of serialization methods}
   s.email = %q{birkirb@stoicviking.net}
   s.extra_rdoc_files = [
@@ -20,12 +20,12 @@ Gem::Specification.new do |s|
      "acts_as_serializable.gemspec",
      "init.rb",
      "lib/acts_as_serializable.rb",
-     "lib/version.rb",
-     "lib/versions.rb",
+     "lib/serializable/version.rb",
+     "lib/serializable/versions.rb",
      "spec/acts_as_serializable_spec.rb",
-     "spec/app/serializations/test_rails_model/test_rails_model/version_1_0_0.rb",
-     "spec/app/serializations/test_rails_model/test_rails_model/version_1_5.rb",
-     "spec/app/serializations/test_rails_model/test_rails_model/version_2_1.rb",
+     "spec/app/serializations/test_rails_model/version_1_0_0.rb",
+     "spec/app/serializations/test_rails_model/version_1_5.rb",
+     "spec/app/serializations/test_rails_model/version_2_1.rb",
      "spec/serializations/test_model/version_1_0_0.rb",
      "spec/serializations/test_model/version_1_5.rb",
      "spec/serializations/test_model/version_2_1.rb",
@@ -48,9 +48,9 @@ Gem::Specification.new do |s|
      "spec/serializations/test_model/version_1_0_0.rb",
      "spec/serializations/test_model/version_2_1.rb",
      "spec/serializations/test_model/version_1_5.rb",
-     "spec/app/serializations/test_rails_model/test_rails_model/version_1_0_0.rb",
-     "spec/app/serializations/test_rails_model/test_rails_model/version_2_1.rb",
-     "spec/app/serializations/test_rails_model/test_rails_model/version_1_5.rb"
+     "spec/app/serializations/test_rails_model/version_1_0_0.rb",
+     "spec/app/serializations/test_rails_model/version_2_1.rb",
+     "spec/app/serializations/test_rails_model/version_1_5.rb"
   ]
 
   if s.respond_to? :specification_version then

@@ -1,4 +1,4 @@
-module Serializable
+module Serializations
   module TestModel
     class Version_1_5
       def self.serialize(test_model, builder, options)
