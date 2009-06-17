@@ -10,17 +10,33 @@ module Serializable
     base.extend(ClassMethods)
   end
 
+  def self.scan_rails_app_paths
+    if defined?(RAILS_ROOT)
+      # Rails plugin usage
+      project_paths = Array.new
+      $LOAD_PATH.each do |path|
+        Rails.logger.info "Scanning: #{path}"
+        if path.match(/#{Regexp.escape(RAILS_ROOT)}.*\/app$/)
+          Rails.logger.info "Searching: #{path}"
+          project_paths << path
+        end
+      end
+      project_paths
+    else
+      Array.new
+    end
+  end
+
+  SERIALIZATION_PROJECT_PATHS = Serializable.scan_rails_app_paths
+
   module ClassMethods
     def acts_as_serializable
       include Serializable::InstanceMethods
       extend Serializable::SingletonMethods
       @serialization_versions = Versions.new
       find_local_serialization_methods
-      if defined?(RAILS_ROOT)
-        # Rails plugin usage
-        scan_rails_app_paths.each do |path|
-          find_project_serialization_classes(path)
-        end
+      SERIALIZATION_PROJECT_PATHS.each do |path|
+        find_project_serialization_classes(path)
       end
     end
   end
@@ -75,16 +91,6 @@ module Serializable
         end
       EOV
       @serialization_versions << Version.new(method_version)
-    end
-
-    def scan_rails_app_paths
-      project_paths = Array.new
-      $LOAD_PATH.each do |path|
-        if path.match(/#{Regexp.escape(RAILS_ROOT)}.*\/app$/)
-          project_paths << path
-        end
-      end
-      project_paths
     end
   end
 
