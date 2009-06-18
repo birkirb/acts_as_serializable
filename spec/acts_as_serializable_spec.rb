@@ -38,9 +38,6 @@ class TestModel
   find_project_serialization_classes(File.join(File.dirname(__FILE__)))
 end
 
-::RAILS_ROOT = File.join(File.dirname(__FILE__))
-$LOAD_PATH.push(File.join(::RAILS_ROOT, 'app'))
-
 class TestRailsModel
   include Serializable
   acts_as_serializable

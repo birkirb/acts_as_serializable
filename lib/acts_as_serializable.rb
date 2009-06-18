@@ -15,9 +15,7 @@ module Serializable
       # Rails plugin usage
       project_paths = Array.new
       $LOAD_PATH.each do |path|
-        Rails.logger.info "Scanning: #{path}"
         if path.match(/#{Regexp.escape(RAILS_ROOT)}.*\/app$/)
-          Rails.logger.info "Searching: #{path}"
           project_paths << path
         end
       end
