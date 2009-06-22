@@ -8,7 +8,10 @@ class SerializableObject
   end
 
   def serialize_to_version_1_5(builder, options)
-    "This is version 1.5.0"
+    postfix = if block_given?
+      yield(builder)
+    end
+    "This is version 1.5.0#{postfix}"
   end
 
   def serialize_to_version_2_1(builder, options)
@@ -133,6 +136,13 @@ describe Serializable, 'when included in a class that has multiple versioned ser
 
       klass.to_xml.should == "This is version 1.5.0"
     end
+
+    it 'should pass on blocks' do
+      SerializableObject.default_serialization_version = Serializable::Version.new('1.5')
+      klass = SerializableObject.new
+
+      klass.to_xml { '.1' }.should == "This is version 1.5.0.1"
+    end
   end
 end
 
@@ -183,6 +193,13 @@ describe Serializable, 'when included in a class that has multiple serialization
       klass.to_xml(:version => '1.0.0').should == "This is version 1.0.0 for TestRailsModel"
       klass.to_json(:version => '1.5.0').should == "\"This is version 1.5.0 for TestRailsModel\""
       klass.to_hash(:version => '2.1.0').should == "This is version 2.1 for TestRailsModel"
+    end
+
+    it 'should pass on blocks' do
+      TestModel.default_serialization_version = "1.5"
+      klass = TestModel.new
+
+      klass.to_xml { 'BlockedInsertion' }.should == "This is version 1.5.0 for BlockedInsertion"
     end
   end
 end

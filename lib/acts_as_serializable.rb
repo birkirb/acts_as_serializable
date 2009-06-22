@@ -84,8 +84,8 @@ module Serializable
 
     def define_local_serialization_method(method_version)
       class_eval <<-EOV
-        def serialize_to_version_#{method_version}(builder, options)
-          Serializations::#{self.name}::Version_#{method_version}.serialize(self, builder, options)
+        def serialize_to_version_#{method_version}(builder, options, &block)
+          Serializations::#{self.name}::Version_#{method_version}.serialize(self, builder, options, &block)
         end
       EOV
       @serialization_versions << Version.new(method_version)
@@ -94,36 +94,36 @@ module Serializable
 
   # This module contains instance methods
   module InstanceMethods
-    def to_hash(options = {})
-      serialize(Builder::HashStructure.new, options)
+    def to_hash(options = {}, &block)
+      serialize(Builder::HashStructure.new, options, &block)
     end
 
-    def to_json(options = {})
-      serialize(Builder::JsonFormat.new, options).to_json
+    def to_json(options = {}, &block)
+      serialize(Builder::JsonFormat.new, options, &block).to_json
     end
 
-    def to_xml(options = {})
-      serialize(Builder::XmlMarkup.new, options)
+    def to_xml(options = {}, &block)
+      serialize(Builder::XmlMarkup.new, options, &block)
     end
 
-    def serialize(builder, options = {})
+    def serialize(builder, options = {}, &block)
       if version_number = options[:version]
         if version = self.class.serialization_versions.find_version(Version.new(version_number))
-          return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options)
+          return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options, &block)
         else
           raise "Version #{version_number} given but no serialization method found"
         end
       else
         if version = self.class.default_serialization_version
-          return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options)
+          return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options, &block)
         else
           raise "No serialization method found"
         end
       end
     end
 
-    def serialize_for(builder, options = {})
-      self.send(builder.serialization_method!, options)
+    def serialize_for(builder, options = {}, &block)
+      self.send(builder.serialization_method!, options, &block)
     end
   end
 
