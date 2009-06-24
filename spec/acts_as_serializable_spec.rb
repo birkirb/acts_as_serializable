@@ -199,7 +199,7 @@ describe Serializable, 'when included in a class that has multiple serialization
       TestModel.default_serialization_version = "1.5"
       klass = TestModel.new
 
-      klass.to_xml { 'BlockedInsertion' }.should == "This is version 1.5.0 for BlockedInsertion"
+      klass.to_hash { 'BlockedInsertion' }.should == "This is version 1.5.0 for BlockedInsertion"
     end
   end
 end
