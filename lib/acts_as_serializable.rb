@@ -83,7 +83,7 @@ module Serializable
     end
 
     def define_local_serialization_method(method_version)
-      class_eval <<-EOV
+      class_eval(<<-EOV, __FILE__, __LINE__)
         def serialize_to_version_#{method_version}(builder, options, &block)
           Serializations::#{self.name}::Version_#{method_version}.serialize(self, builder, options, &block)
         end
