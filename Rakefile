@@ -13,7 +13,7 @@ begin
     s.rubyforge_project = %q{serializable}
     s.rubygems_version = %q{1.3.1}
     #s.required_rubygems_version = "1.3.1"
-    s.add_dependency(%q<jsonbuilder>, [">= 0.0.7"])
+    s.add_dependency(%q<jsonbuilder>, [">= 0.1.0"])
     s.add_dependency(%q<activesupport>, [">= 1.2"])
   end
 rescue LoadError
