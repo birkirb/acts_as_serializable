@@ -14,9 +14,9 @@ versioned in-class, in a module or in seperately managed class files.
   cd acts_as_serializable
   rake install
 
-=== Gem Installation
+=== Rails Plugin Installation
 
-  gem install birkirb-acts_as_serializable --source http://gems.github.com
+  script/plugin install git://github.com/birkirb/rails-refactor.git
 
 == Examples
 
