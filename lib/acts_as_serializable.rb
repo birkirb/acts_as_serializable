@@ -108,10 +108,11 @@ module Serializable
 
     def serialize(builder, options = {}, &block)
       if version_number = options[:version]
-        if version = self.class.serialization_versions.find_version(Version.new(version_number))
-          return self.send("serialize_to_version_#{version.to_s_underscored}", builder, options, &block)
+        version = version_number.is_a?(Serializable::Version) ? version_number : Version.new(version_number)
+        if found_version = self.class.serialization_versions.find_version(version)
+          return self.send("serialize_to_version_#{found_version.to_s_underscored}", builder, options, &block)
         else
-          raise "Version #{version_number} given but no serialization method found"
+          raise "Version #{version} given but no serialization method found"
         end
       else
         if version = self.class.default_serialization_version
