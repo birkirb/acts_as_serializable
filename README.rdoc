@@ -16,7 +16,7 @@ versioned in-class, in a module or in seperately managed class files.
 
 === Rails Plugin Installation
 
-  script/plugin install git://github.com/birkirb/rails-refactor.git
+  script/plugin install git://github.com/birkirb/acts_as_serializable.git
 
 == Examples
 
