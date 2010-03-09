@@ -10,7 +10,7 @@ module Serializable
           _set_controller_content_type(Mime::JSON)
           xbuilder = ::Builder::HashStructure.new
           #{template.source}
-          json_with_callback(xbuilder.target!.to_json)
+          xbuilder.target!.to_json
         else
           _set_controller_content_type(Mime::XML)
           xbuilder = ::Builder::XmlMarkup.new
