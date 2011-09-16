@@ -12,7 +12,7 @@ begin
     s.homepage = %q{http://github.com/birkirb/acts_as_serializable}
     s.rubyforge_project = %q{serializable}
     s.rubygems_version = %q{1.3.1}
-    #s.required_rubygems_version = "1.3.1"
+    s.add_dependency(%q<builder>, ["<= 2.1.2"])
     s.add_dependency(%q<jsonbuilder>, [">= 0.1.0"])
     s.add_dependency(%q<activesupport>, [">= 1.2"])
   end
@@ -34,44 +34,18 @@ rescue LoadError
   end
 end
 
-# begin
-#   require 'cucumber'
-#   require 'cucumber/rake/task'
-
-
-#   desc "Run Cucumber feature tests"
-#   Cucumber::Rake::Task.new(:features) do |t|
-#     t.cucumber_opts = "--format pretty" 
-#   end
-
-# rescue LoadError
-#   desc 'Cucumber rake task not available'
-#   task :features do
-#     abort 'Cucumber rake task is not available. Be sure to install cucumber as a gem or plugin'
-#   end
-# end
-
 begin
   require 'spec/rake/spectask'
-  require 'cucumber'
-  require 'cucumber/rake/task'
   require 'spec/rake/verify_rcov'
 
   task :test do
     Rake::Task[:spec].invoke
-#   Rake::Task[:features].invoke
   end
 
   desc "Run tests with RCov"
   namespace :rcov do
     rm "coverage.data" if File.exist?("coverage.data")
 
-#   desc "Run Features with RCov"
-#   Cucumber::Rake::Task.new(:features) do |t|
-#     t.rcov = true
-#     t.rcov_opts = %w{ --exclude osx\/objc,gems\/,spec\/,features\/ --aggregate coverage.data}
-#     t.rcov_opts << %[-o "coverage"]
-#   end
 
     Spec::Rake::SpecTask.new(:spec) do |t|
       t.spec_opts = ["-f specdoc", "-c"]
@@ -83,7 +57,6 @@ begin
     desc "Run both specs and features to generate aggregated coverage"
     task :all do |t|
       Rake::Task["rcov:spec"].invoke
-#     Rake::Task["rcov:features"].invoke
     end
 
     RCov::VerifyTask.new(:verify => 'rcov:all') do |t|

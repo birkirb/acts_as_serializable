@@ -8,6 +8,8 @@ A gem/rails plugin for handling versioning of serialization methods (to_xml, to_
 Uses the builder pattern for a one stop multi-format serialization method, which can be
 versioned in-class, in a module or in seperately managed class files.
 
+Works with Builder::XmlMarkup <= 2.1.2
+
 == Installation from source
 
   git clone git://github.com/birkirb/acts_as_serializable.git
@@ -17,6 +19,10 @@ versioned in-class, in a module or in seperately managed class files.
 === Rails Plugin Installation
 
   script/plugin install git://github.com/birkirb/acts_as_serializable.git
+
+=== Gem Installation
+
+  gem install birkirb-acts_as_serializable --source http://gems.github.com
 
 == Examples
 
