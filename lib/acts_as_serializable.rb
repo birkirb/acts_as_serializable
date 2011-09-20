@@ -43,7 +43,7 @@ module Serializable
   module SingletonMethods
     def find_project_serialization_classes(project_path)
       klass_name = self.name
-      serialization_directory = File.join(project_path, 'serializations', klass_name.underscore)
+      serialization_directory = File.expand_path(File.join(project_path, 'serializations', klass_name.underscore))
       puts serialization_directory.inspect
       if File.exist?(serialization_directory)
         Find.find(serialization_directory) do |path|
