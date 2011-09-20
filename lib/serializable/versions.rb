@@ -1,3 +1,5 @@
+require 'serializable/version'
+
 module Serializable
   class Versions < Array
 

@@ -1,6 +1,7 @@
 require 'jsonbuilder'
 require 'active_support'
 require 'find'
+require 'serializable/version'
 
 module Serializable
   SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version_((:?\d+_?)+)$/
