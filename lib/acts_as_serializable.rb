@@ -43,12 +43,15 @@ module Serializable
     def find_project_serialization_classes(project_path)
       klass_name = self.name
       serialization_directory = File.join(project_path, 'serializations', klass_name.underscore)
-      Find.find(serialization_directory) do |path|
-        if File.file?(path) && versioned_klass = path.match(SERIALIZED_CLASS_NAME_REGEXP)
-          require path
-          klass = Serializations.const_get("#{klass_name}").const_get("Version_#{versioned_klass[1]}")
-          if klass && klass.respond_to?(:serialize)
-            define_local_serialization_method(versioned_klass[1])
+      puts serialization_directory.inspect
+      if File.exist?(serialization_directory)
+        Find.find(serialization_directory) do |path|
+          if File.file?(path) && versioned_klass = path.match(SERIALIZED_CLASS_NAME_REGEXP)
+            require path
+            klass = Serializations.const_get("#{klass_name}").const_get("Version_#{versioned_klass[1]}")
+            if klass && klass.respond_to?(:serialize)
+              define_local_serialization_method(versioned_klass[1])
+            end
           end
         end
       end
@@ -75,7 +78,7 @@ module Serializable
 
     def find_local_serialization_methods
       self.instance_methods.each do |method_name|
-        if method_name = method_name.match(SERIALIZE_TO_VERSION_REGEXP)
+        if method_name = SERIALIZE_TO_VERSION_REGEXP.match(method_name)
           @serialization_versions << Version.new(method_name[1])
         end
       end
