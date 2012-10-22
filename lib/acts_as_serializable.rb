@@ -15,6 +15,8 @@ module Serializable
     if defined?(RAILS_ROOT)
       # Rails plugin usage
       project_paths = Array.new
+      # The app directory itself is not in $LOAD_PATH in Rails 3
+      project_paths << Rails.root.join('app') if defined?(Rails) && File.exists?(Rails.root.join('app'))
       $LOAD_PATH.each do |path|
         if path.match(/#{Regexp.escape(RAILS_ROOT)}.*\/app$/)
           project_paths << path
