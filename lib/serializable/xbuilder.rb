@@ -1,7 +1,13 @@
 module Serializable
-  class XBuilder < ::ActionView::TemplateHandler
-    include ActionView::TemplateHandlers::Compilable
+  if defined?(Rails)
+    RAILS_2 = Rails::VERSION::MAJOR == 2
+  else
+    RAILS_2 = true
+  end
+  parent  = RAILS_2 ? ::ActionView::TemplateHandler : Object
 
+  class XBuilder < parent
+    include ActionView::TemplateHandlers::Compilable if Serializable::RAILS_2
     def compile(template)
       compiled_code = <<-CODE
         format = params[:format]
@@ -21,6 +27,7 @@ module Serializable
       compiled_code
     end
 
+    alias_method :call, :compile
   end
 end
 
