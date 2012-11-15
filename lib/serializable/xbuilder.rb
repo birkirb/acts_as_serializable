@@ -1,6 +1,8 @@
 module Serializable
-  class XBuilder < ::ActionView::TemplateHandler
-    include ActionView::TemplateHandlers::Compilable
+  xbuilder_parent  = using_rails_3? ? Object : ::ActionView::TemplateHandler
+
+  class XBuilder < xbuilder_parent
+    include ActionView::TemplateHandlers::Compilable unless using_rails_3?
 
     def compile(template)
       compiled_code = <<-CODE
@@ -21,6 +23,7 @@ module Serializable
       compiled_code
     end
 
+    alias_method :call, :compile
   end
 end
 

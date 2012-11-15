@@ -3,6 +3,11 @@ require 'active_support'
 require 'find'
 require 'serializable/version'
 
+def using_rails_3?
+  # Assume 3 unless we have 2.
+  defined?(Rails) && Rails::VERSION::MAJOR != 2
+end
+
 module Serializable
   SERIALIZE_TO_VERSION_REGEXP = /^serialize_to_version_((:?\d+_?)+)$/
   SERIALIZED_CLASS_NAME_REGEXP = /\/version_((:?\d+_?)+)\.rb$/
