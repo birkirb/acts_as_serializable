@@ -1,4 +1,4 @@
-require 'spec/spec_helper'
+require 'spec_helper'
 
 describe Serializable::Version, 'when created with a version numeric string' do
 
